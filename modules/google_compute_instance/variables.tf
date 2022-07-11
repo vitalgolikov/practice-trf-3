@@ -4,7 +4,7 @@ variable "vm_station" {
     { prefix        = string,
       machine_type  = string,
       instance_zone = string,
-      network_config =map(string({
+      network_config =map(object({
         network       = string,
         subnetwork    = string
       })),
