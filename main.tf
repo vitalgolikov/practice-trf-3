@@ -33,12 +33,39 @@ module "gce_vpc" {
 }
 
 
-module "gce_instance" {
+module "gce_instance_dev" {
+  count      = 5
+  source     = "./modules/google_compute_instance"
+  region     = var.region
+  vm_station = [
+    {
+      prefix : "dev-${count.index}",
+      machine_type : "f1-micro",
+      instance_zone : var.zone,
+      network_config = {
+        lan1 = {
+          network : module.gce_vpc.vpc_name_advanced,
+          subnetwork : module.gce_vpc.subnet_name_advanced[0]
+        },
+        lan2 = {
+          network : module.gce_vpc.vpc_name
+          subnetwork : module.gce_vpc.subnet_name[1]
+        }
+      }
+      tags : ["web", "1C"],
+      image = "debian-cloud/debian-9"
+      items : 3
+    }
+  ]
+}
+
+module "gce_instance_prod" {
+  count = 5
   source = "./modules/google_compute_instance"
   region = var.region
   vm_station = [
     {
-      prefix : "dev",
+      prefix : "prod-${count.index}",
       machine_type : "f1-micro",
       instance_zone : var.zone,
       network_config = {
