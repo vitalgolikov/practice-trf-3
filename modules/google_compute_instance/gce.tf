@@ -2,11 +2,12 @@
 
 locals {
   vm_conf = {
-    for x in var.vm_station :
-    "${x.prefix}" => x
+  //      for x in var.vm_station : [for (i = 0; i < x.items; i++): {" ${i}  ${x.prefix}" => x}]
+ for x in var.vm_station :
+  "${x.prefix}" => x
   }
-}
 
+}
 
 resource "google_compute_instance" "default" {
 
@@ -18,17 +19,18 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = var.image
+      image = each.value.image
     }
   }
 
   tags = each.value.tags
 
   dynamic "network_interface" {
-    for_each = var.vm_station
+    //for_each =  {for cfg in each.value.network_config : "LAN-${cfg.network}"=> cfg}
+    for_each = each.value.network_config
     content {
-      network    = each.value.network
-      subnetwork = each.value.subnetwork
+     network    = network_interface.value.network
+     subnetwork =  network_interface.value.subnetwork
 
     }
   }

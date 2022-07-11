@@ -4,9 +4,12 @@ variable "vm_station" {
     { prefix        = string,
       machine_type  = string,
       instance_zone = string,
-      network       = string,
-      subnetwork    = string,
+      network_config =map(string({
+        network       = string,
+        subnetwork    = string
+      })),
       tags          = list(string),
+      image         = string,
       items        = number
 
   }))
@@ -16,7 +19,7 @@ variable "vm_station" {
 
 
 
-
+/*
 variable "image" {
   type = string
   //  default = "debian-cloud/debian-9"
@@ -24,7 +27,7 @@ variable "image" {
 
 }
 
-
+*/
 
 
 variable "region" {
