@@ -2,7 +2,7 @@
 /lection/
 *.tfstate
 .terraform
-../.idea
+./.idea
 fresh-span-354807-534ab503606f.json
 *.xml
 *.backup
